@@ -18,3 +18,10 @@ git --version
 5.Создаем коммит - git commit -m "First commit"
 6.Пушим изменения - git push -u origin main
 7.Команда выполненная в репозитории, должна возвращать ответ origin - git remote
+
+Выполнить команду clone (projectName test_clone) :
+1.Перейдите на страницу ваших проектов "Projects" → "Your projects". Найдите там репозиторий под названием test_clone, зайдите в него
+2.Нажмите на синюю кнопку "Clone", которая находится справа. Выберите команду, которая находится под заголовком "Clone with SSH", скопируйте её
+3.Перейдите в папку ~/projects командой - cd ~/projects
+4.Напишите в начале командной строки git clone и вставьте скопированную команду - git clone git@gitlab.xxx.xx:git_sXXXXXX/test_clone.git -b master
+5.После успешного выполнения команды, выполните команду - ls
