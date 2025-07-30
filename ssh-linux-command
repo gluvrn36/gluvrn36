@@ -4,3 +4,11 @@ ssh username@host
 Переключение на root пользователя:
 sudo -i
 
+Создать ssh ключ для Gitlab :
+ssh-keygen -t rsa -f ~/.ssh/test
+
+Добавть публичную часть ключа в Gitlab:
+Переходим в профиль(верхняя часть экрана иконка) -> Edit Profile -> ssh keys -> Add new key
+
+Просмотр публичной части ключа, выполняем команду :
+cat /Users/xxx/.ssh/test.pub
