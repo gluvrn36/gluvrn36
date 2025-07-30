@@ -12,3 +12,7 @@ ssh-keygen -t rsa -f ~/.ssh/test
 
 Просмотр публичной части ключа, выполняем команду :
 cat /Users/xxx/.ssh/test.pub
+
+Для работы по ssh, необходимо в переменные добавить пользователя и email для работы с Git:
+git config user.name xxxxxx
+git config user.email XXXXX@email.ru
