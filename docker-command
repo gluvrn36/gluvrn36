@@ -4,7 +4,7 @@ docker run -it --rm --name gitlab-runner -v /var/run/docker.sock:/var/run/docker
 
 ```
 Enter the GitLab instance URL (for example, https://gitlab.com/):
-https://gitlab.xxxx.xx/  ## __Вводим url нашего хоста Gitlab__
+https://gitlab.xxxx.xx/  ## Вводим url нашего хоста Gitlab
 Enter the registration token:
 <Ваш токен>   ## Наш токен из Gitlab, который взяли из нашего проекта (Settings -> CI/CD -> Runners -> : -> Registration token)
 Enter a description for the runner:
