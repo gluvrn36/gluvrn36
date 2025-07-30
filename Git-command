@@ -4,6 +4,12 @@ sudo apt install git-all
 Проверка версии Git :
 git --version
 
+Посмотреть редактор по-умолчанию который сейчас стоит для Git:
+git config --global core.editor
+
+Изменить редактор по-умолчанию для Git :
+git config --global core.editor "vi"
+
 Создание локального репозитория :
 1.Создайте папку под названием командой - mkdir test_repo
 2.Перейдите в папку test_repo командой - cd test_repo
