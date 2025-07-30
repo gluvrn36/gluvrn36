@@ -1,0 +1,8 @@
+Пример регистрации контейнера Docker (gitlab-runner):
+docker run -it --rm --name gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/config:/etc/gitlab-runner gitlab/gitlab-runner:alpine3.14-v14.10.0 register
+
+Пример запуска контейнера Docker :
+docker run -d --name gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/config:/etc/gitlab-runner gitlab/gitlab-runner:alpine3.14-v14.10.0
+
+Проверка запущенных контейнеров :
+docker ps
