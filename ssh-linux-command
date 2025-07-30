@@ -1,0 +1,6 @@
+Подключение по ssh :
+ssh username@host
+
+Переключение на root пользователя:
+sudo -i
+
