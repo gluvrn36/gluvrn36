@@ -1,8 +1,28 @@
 Пример регистрации контейнера Docker (gitlab-runner):
+
 docker run -it --rm --name gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/config:/etc/gitlab-runner gitlab/gitlab-runner:alpine3.14-v14.10.0 register
 
+```
+Enter the GitLab instance URL (for example, https://gitlab.com/):
+https://gitlab.xxxx.xx/  ## __Вводим url нашего хоста Gitlab__
+Enter the registration token:
+<Ваш токен>   ## Наш токен из Gitlab, который взяли из нашего проекта (Settings -> CI/CD -> Runners -> : -> Registration token)
+Enter a description for the runner:
+[56a6b5g741e0]: My first runner
+Enter tags for the runner (comma-separated):
+local,docker
+Enter optional maintenance note for the runner:
+Enter an executor: docker, parallels, virtualbox, kubernetes, custom, docker-ssh, shell, ssh, docker+machine, docker-ssh+machine:
+docker
+Enter the default Docker image (for example, ruby:2.7):
+alpine:3.14
+Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+```
+
 Пример запуска контейнера Docker :
+
 docker run -d --name gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/config:/etc/gitlab-runner gitlab/gitlab-runner:alpine3.14-v14.10.0
 
 Проверка запущенных контейнеров :
+
 docker ps
