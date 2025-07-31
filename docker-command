@@ -46,8 +46,8 @@ check_interval = 0
 
 [[runners]]
   name = "my-first-runner"
-  url = "https://gitlab.slurm.io/"
-  token = "glrtr-eFSdMz1T5kMGReKbZhyg6W86MQpwOjJ6cDQKdDozDg.01.161e12hna"
+  url = "https://url-gitlab/"
+  token = "token" ## Из пункта 2
   executor = "docker"
   [runners.custom_build_dir]
   [runners.cache]
