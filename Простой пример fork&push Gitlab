@@ -2,7 +2,7 @@
 
 Затем отключаем связь fork'а с родителем: меню слева - Settings -> General -> Advanced (жмём Expand) -> Remove fork relationship (потребуется подтверждение)
 
-ssh git clone git@gitlab.url:<ваш номер логина>/cicd-app.git
+git clone git@gitlab.url:<ваш номер логина>/cicd-app.git
 
 Переносим в корень проекта файлы из одной из папок по выбору, например так:
 cd cicd-app
