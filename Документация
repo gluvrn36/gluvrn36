@@ -1,0 +1,10 @@
+Переменные - https://docs.gitlab.com/ee/ci/variables/#create-a-custom-cicd-variable-in-the-gitlab-ciyml-file
+Пайплайны и стадии - https://docs.gitlab.com/ee/ci/pipelines/
+Джобы - https://docs.gitlab.com/ee/ci/jobs/
+Extends - https://docs.gitlab.com/ee/ci/yaml/#extends
+YAML якоря - https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html#yaml-anchors-for-scripts
+Multi-project (downstream) - https://docs.gitlab.com/ee/ci/pipelines/multi_project_pipelines.html
+Rules - https://docs.gitlab.com/ee/ci/jobs/job_control.html
+Only - https://docs.gitlab.com/ee/ci/jobs/job_control.html#specify-when-jobs-run-with-only-and-except
+Changes - https://docs.gitlab.com/ee/ci/jobs/job_control.html#onlychanges--exceptchanges-examples
+Хороший пример когда это все нужно (английский) - https://how-to.dev/how-to-set-up-monorepo-build-in-gitlab-ci
