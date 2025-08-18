@@ -1,0 +1,65 @@
+ss -t | awk '/:ssh/{print $1}' | sort | uniq -c - кол-во активных соединений
+ps -ef | awk '/sshd:.*@notty$/{print $1}' | sort | uniq -c - сессии по учеткам
+ss -tp | awk '/:ssh/{print $5}' |cut -d: -f1 | sort | uniq -c - коннекты по ip
+ss -tp | grep :ssh - коннекты без фильтров
+watch ss -t state established sport = :ssh \| cut -d: -f2 \| sort \| uniq -c - обновление в онлайне кол-во коннектов
+
+Безопасная передача пароля:
+
+Если необходимо передать смежной системе пароль который необходимо установить ТУЗ RICH (чтобы соответствовал требованиям ИБ), делаем следующее:
+Любая из 4 нижеследующих команд выполнит хеширование (sha512) пароля в формате, пригодном для использования в /etc/shadow или useradd/usermod:
+python3 -c "import crypt;print(crypt.crypt('YOUR_PASSWORD'))"
+python3 -c 'import crypt,sys;print(crypt.crypt(sys.argv[1]))' YOUR_PASSWORD
+
+echo YOUR_PASSWORD | python3 -c 'import crypt,sys;[print(crypt.crypt(l)) for l in sys.stdin]'
+echo YOUR_PASSWORD | openssl passwd -6 -stdin
+
+Который потом можно вставить в команду, к примеру usermod:
+sudo -u aroot sudo usermod -p"<ХЭШ>" USERNAME
+
+Например, для пароля q1q2q3:
+echo q1q2q3 | openssl passwd -6 -stdin
+будет выдано - $6$04lSyEoYMAbRrRDE$NNImKHjJmpvtE3IRwOMjjdNcrbE2sI4/pqpmv6V4UiyBOrp6Mfx5YyTpu.
+HUcANvoGVg3npZQkrSd3/8AeFWQ
+
+Соответственно, на сервере нужно сделать:
+sudo -u aroot sudo usermod -p'$6$04lSyEoYMAbRrRDE$NNImKHjJmpvtE3IRwOMjjdNcrbE2sI4/pqpmv6V4UiyBOrp6Mfx5YyTpu.HUcANvoGVg3npZQkrSd3/8AeFWQ.' USERNAME
+
+Создание пользователей для директории :
+sudo -u aroot sudo useradd -m -d /data/sftponly -s /usr/sbin/nologin -G sftponly USERNAME
+sudo -u aroot sudo useradd -m -d /data/sftponly -s /usr/sbin/nologin -G sftponly USERNAME
+
+Сделать пароль для пользователя:
+sudo -u aroot sudo usermod -p"$(head -c12 /dev/random | basenc --z85 | tee -a /dev/stderr | openssl passwd -6 -stdin)" USERNAME
+
+Проверяем группу у пользователя, если все сделано правильно видим следующее:
+groups USERNAME
+
+Проверяем права на папку, в нашем случае следующее:
+sudo ls -l /data/sftp/
+
+Создаем папку :
+sudo -u USERNAME mkdir -p /data/sftp/files ( выделено красным для примера создаваемая папка, называем папку как нам необходимо)
+
+Т.к. у директории /data ограниченный доступ для всех пользователей кроме владельца, необходимо выполнить
+следующие команды чтобы у созданного пользователя были права к созданной папке :
+sudo -u aroot setfacl -m u:USERNAME:rwx /data/sftp/files
+sudo -u aroot setfacl -m u:USERNAME1:r-x /data/sftp/files
+sudo -u aroot setfacl -m d:u:USERNAME:rwx /data/sftp/files
+sudo -u aroot setfacl -m d:u:USERNAME1:r-x /data/sftp/files
+sudo -u aroot setfacl -m u:USERNAME1:r-x /data/sftp
+sudo -u aroot setfacl -m u:USERNAME:r-x /data/sftp
+
+В нашем примере у пользователя USERNAME права на чтение-запись-выполнение, у пользователя ucpuser
+чтение-выполнение. Соответственно подставляем своего пользователя и папку к которой открываем права.
+После проделанных шагов, проверяем что у пользователя есть доступ к sftp успешным коннектом.
+
+Создать папку и пользователя с правами :
+u1=sftp; n=data; g=sftponly; d=files; for u in $u1; do echo -n $u: 1>&2; sudo -u aroot sudo useradd -p"$(head -
+c16 /dev/random | basenc --z85 | tee -a /dev/stderr | openssl passwd -6 -stdin)" -d /$n/$g -G $g $u; done && sudo -u
+aroot bash -c "sudo chown aroot /$n/$g && mkdir -p /$n/$g/$d && setfacl -m u:aroot:rwx,u:$u1:rwx,d:u:aroot:rwx,d:u:$u1:
+rwx \$_ && sudo chown $u1 \$_ && sudo chown root. /$n/$g"
+
+Проблема с правами у пользователя, при некорректной выполнении команды на sftp :
+sudo -u aroot sudo chown root /data
+
