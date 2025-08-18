@@ -1,0 +1,65 @@
+kubectl exec -i -t -n NAMESPACE POD_NAME -c bash -- sh -c "clear; (bash || ash || sh)"
+
+echo > /dev/tcp/HOST/PORT && echo YES
+
+while true; do sleep 1 && nc -vz HOST PORT -w 1; done
+
+cygwin
+Получить список сертификатов
+kubectl --context=NAMESPACE exec -it svc/CONATINER_NAME -c CONATINER_NAME -- ls /cert/
+
+Копирование на локальный комп в папку
+
+kubectl --context NAMESPACE cp NAMESPACE/POD_NAME:/cert /DIRECTORY/cert/test --container=CONATINER_NAME
+
+Копирование в под, перейти в C (cd /cygdrive/c), перейти в каталог где лежит сертификат (DIRECTORY/cert/FILE_NAME.cer)
+
+kubectl --context NAMESPACE cp FILE NAME.cer NAMESPACE/POD_NAME:/cert/FILE_NAME.cer --container=CONATINER_NAME
+
+Подключиться к поду из bash
+kubectl --context=NAMESPACE exec -it svc/CONATINER_NAME -c CONATINER_NAME -- sh -c "(bash || ash || sh)"
+
+Посмотреть инфу по сертификату
+openssl x509 -inform der -in FILE_NAME.cer -out FILE_NAME.pem - конвертируем в pem
+openssl x509 -in FILE_NAME.pem -text - смотрим инфу о сертификате
+
+Скопировать файл с лок машины (windows) на удаленную (linux)
+Нужна putty и утилита pscp
+pscp.exe C:\DIRECTORY\cert\securityserver-srt.cer HOSTNAME:/data/securityserver-srt.cer
+
+C Линукс на Windows
+pscp.exe HOSTNAME:/tmp/FILE_NAME.pcap C:\DIRECTORY\logs
+
+Снять TCPDUMP :
+
+Дампы можно снимать с хоста HOSTNAME который делали под себя
+
+Прежде чем выполнять команды необходимо убедиться что на хосте с которого запускаем работают команды kubectl и есть конфиг с namespace-ми k8s
+
+kubectl config get-contexts - показать все namespace из дефолтного конфига
+
+kubectl config use-context rich-prod - использовать указанный namespace
+
+Активируем эфемерный контейнер в нужном POD-е:
+
+В переменной c указываем название контейнера из которого хотим снять дамп, выборочно выбирает POD для активации
+
+c=CONATINER_NAME; p=$(kubectl get po -l app.kubernetes.io/name=$c -o jsonpath='{range .items[*]}{.status.containerStatuses[*].ready.true}{.metadata.name}{"\n"}{end}' | tail -1)
+
+Запросит пароль от ТУЗ AD который используется на серверах
+
+Далее командой запускаем снятие логов:
+
+Командой -c 10 указывает что снимаем 10 пакетов, значение можно выставлять любое все зависит от места на диске на какой сохраняем файл. Если не указываем переменную дамп снимается до тех пор пока руками не остановят.
+
+Командой -host 10.50.88.37 указывает что записываем записи в файл дампа только по данному хосту. Если необходимо снимать все записи, данную переменную не указываем
+
+Командой net 10.50.88.0/24 указывает подсеть хоста записи для которого необходимо записывать в дамп. Если не указываем пишет все записи
+
+Командой >/tmp/yourdump1.pcap указываем путь и название файла для дампа
+
+kubectl debug -qit $p --image=harbor.vimpelcom.ru/common/network-multitool-nonroot:0.4 --target $c -- bash -c "setuidbash -pc \"tcpdump -U -w- 2>/dev/null | base64 -w0\"" | base64 -d >/tmp/yourdump.pcap
+
+kubectl debug -qit $p --image=harbor.vimpelcom.ru/common/network-multitool-nonroot:0.4 --target $c -- bash -c "setuidbash -pc \"tcpdump -c10 -U -w- host 10.50.88.37  2>/dev/null | base64 -w0\"" | base64 -d >/tmp/yourdump.pcap
+
+kubectl debug -qit $p --image=harbor.vimpelcom.ru/common/network-multitool-nonroot:0.4 --target $c -- bash -c "setuidbash -pc \"tcpdump -c10 -U -w- net 10.50.88.0/24  2>/dev/null | base64 -w0\"" | base64 -d >/tmp/yourdump1.pcap
