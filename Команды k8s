@@ -1,0 +1,80 @@
+Информационные команды:
+kubectl version - проверка версии
+kubectl version --client - проверка версии клиента
+kubectl componentstatuses - состоянии кластера
+kubectl cluster-info - информация о кластере
+kubectl get nodes - список серверов кластера
+kubectl config view - информация по конфигурации
+kubectl get pods - список Pod'ов
+kubectl describe pods (Name pods) - информация о Pod'е
+kubectl exec (Name pods) date - Запуск команды date на Pod'е
+kubectl get hpa - показать все HorizontalAutoScalers
+kubectl logs (Name pods) - логи Pod'а
+kubectl get services - показать все Services
+kubectl get svc - показать все Services
+kubectl rollout history deployment/glu-deploy(Имя Deployment) - посмотреть историю Deployment'а
+kubectl rollout status deployment/glu-deploy(Имя Deployment) - посмотреть статус Deployment
+kubectl get rs - показать все ReplicaSet
+kubectl describe noder | grep ExternalIP(Для Linux) - Показать External IP о всех Worker Nodes
+kubectl config get-contexts - показать все namespace
+kubectl config use-context rich-prod - использовать указанный namespaceЗапуск/обновление:
+kubectl run myfirstpods(Name pods) --image=glu36/k8s:latest(Name images) --port=80 - создать Pod из DockerImage
+glu36/k8s:latest и открыть порт 80
+kubectl port-forward (Name pods) 7777(localport):80(imageport) - порт 7777 нашего компа теперь Порт 80 нашего Pod
+kubectl apply -f namefile.yaml - сборка Pod'а из кофигурационного файла
+kubectl create deployment glu-deploy --image glu36/k8s:latest(Имя Image) - создание Deployment'а
+kubectl scale deployments (Имя Deployment'а) --replicas 4(Кол-во реплик/копий pod'ов) - создать ReplicaSets
+kubectl autoscale deployments glu-deploy --min=4 --max=6 --cpu-percent=80 - создать Autoscaling для Deployment
+kubectl set image deployment/glu-deploy(Имя Deployment) k8sphp=adv4000/k8sphp:verson1(Имя Container=Новый
+образ и версия) --record - обновление образа Deployment
+kubectl expose deployment glu-deploy --type=ClusterIP --port=80 - Создать Service типа ClusterIP для Deployment
+kubectl expose deployment glu-deploy --type=Nodeport --port=80 - Создать Service типа Nodeport для Deployment
+kubectl expose deployment glu-deploy --type=LoadBalancer --port=80 - Создать Service типа LoadBalancer для
+Deployment
+
+Удаление/откат:
+kubectl delete services my-webserver(Имя Service) - Удалить Service
+kubectl delete pods (Name pods) - удаление Pod'а
+kubectl delete -f (Название файла).yaml - Удалить объекты из указанного файла
+kubectl rollout undo deployment/glu-deploy(Имя предыдущего Deployment) - откат Deployment до предыдущей версии
+kubectl rollout undo deployment/glu-deploy --to-revision=3 - откат до определнной версии Deployment
+kubectl rollout restart deployment/glu-deploy(Имя Deployment) - Deployment заново последней версии
+kubectl delete deployments (Имя Deployment) - удалить Deployment
+Ingress Controller:
+kubectl apply -f https://projectcountour.io/quickstart/contour.yaml - Создать Ingress Controller Contour
+kubectl get services -n projectcontour envoy -o wide - показать Ingress Controller Load Balancer данные
+kubectl get services -o wide - Показать данные всех Services
+kubectl get ingress - Показать все созданные Ingress Rules
+kubectl describe ingress - Показать все созданные Ingress Rules подробно
+kubectl create deployment main --image=glu36/k8s:latest - Создать Deployment
+kubectl create deployment main --image=glu36/k8s:version1 - Создать Deployment
+kubectl create deployment main --image=glu36/k8s:version2 - Создать Deployment
+kubectl scale deployment main --replicas 2 - Создать ReplicaSets
+kubectl scale deployment web1 --replicas 2 - Создать ReplicaSets
+kubectl scale deployment web2 --replicas 2 - Создать ReplicaSets
+kubectl expose deployment main --port 80 (#--type=ClusterIP DEFAULT) - Создать Service, по умолчанию тип ClusterIP
+kubectl expose deployment web1 --port 80 (#--type=ClusterIP DEFAULT) - Создать Service, по умолчанию тип
+ClusterIP
+kubectl expose deployment web2 --port 80 (#--type=ClusterIP DEFAULT) - Создать Service, по умолчанию тип
+ClusterIP
+kubectl expose deployment tomcat --port 8080 (#--type=ClusterIP DEFAULT) - Создать Service, по умолчанию тип
+ClusterIP
+kubectl apply -f ingress-hosts.yaml - Создать Ingress Rules из файла
+kubectl apply -f ingress-paths.yaml - Создать Ingress Rules из файла
+kubectl delete ns projectcontour - стереть полностью Ingress Controller Contour
+
+Helm Charts:
+helm version - версия helm
+helm list - все задеплоенные Helm Releases
+helm serch hub - показать Helm Chart с общего списка Hub
+helm search repo - Показать Helm Chart из добавленных Repos
+helm install app1 Project5/(Имя директории) - задепоить Helm Chart app1 из указанной директории
+helm upgrade app1 Project5/ --set container.image=glu36/k8s:latest - обновить деплоймент app1
+helm create MyChart - сделать скелет Helm Chart в директории MyChart
+helm package Project5/ - запоковать Helm Chart в архив
+helm install app2 App-HelmChart-0.1.0.tgz - задеплоить Helm Chart app2 из архива
+helm delete app1 - удалить Деплоймент Helm Chart app1
+helm uninstall app1 - удалить Деплоймент Helm Chart app1
+helm repo add bitnami https://charts.bitnami.com/bitnami - добавить Helm Chart Repo от binami
+helm install my_website bitnamy/apache -f my_values.yaml - Задеплоить Helm Chart bitnami/apache с нашими
+переменными
